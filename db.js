@@ -1,12 +1,12 @@
 const mysql = require('mysql');
 
 // db connection
-console.log(process.env.JAWSDB_URL);
+let connection;
 if(process.env.JAWSDB_URL) {
-  const connection = mysql.createPool(process.env.JAWSDB_URL);
+  connection = mysql.createPool(process.env.JAWSDB_URL);
 }
 else {
-  const connection = mysql.createPool({
+  connection = mysql.createPool({
     host: 'localhost',
     port: '3306',
     user: 'root',
