@@ -1,14 +1,19 @@
 const mysql = require('mysql');
 
 // db connection
-const connection = mysql.createPool({
-  host: 'localhost',
-  port: '3306',
-  user: 'root',
-  password: 'myPass',
-  connectionLimit: 20,
-  database: 'notetaker'
-});
+if(process.env.JAWSDB_URL) {
+  const connection = mysql.createPool(process.env.JAWSDB_URL);
+}
+else {
+  const connection = mysql.createPool({
+    host: 'localhost',
+    port: '3306',
+    user: 'root',
+    password: 'myPass',
+    connectionLimit: 20,
+    database: 'notetaker'
+  });
+}
 
 let db = {};
 
