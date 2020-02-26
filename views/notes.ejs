@@ -1,21 +1,43 @@
 <nav class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" href="/">Note Taker
   </a>
-  <div class="icons">
-    <i class="fas fa-plus text-light new-note"></i>
+  <div>
+      <button class="btn btn-primary add-note"><i class="fas fa-plus text-light"></i></button>
   </div>
 </nav>
 
 <div class="container">
   <div class="row mt-3">
-    <div class="col-xs-3">
-
+    <div class="col-4">
+      <table class="table">
+        <thead class="text-center">
+          <tr class="thead-dark">
+            <th scope="col">Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% notes.map((note) => { %>
+            <tr>
+              <td class="col note" data-id=<%= note.id %>><%= note.title %></td>
+              <td>
+                <button class="btn btn-sm btn-danger delete-button" data-id=<%= note.id %>><i class="far fa-trash-alt"></i></button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
     </div>
-    <div class="col-xs-9">
-      <div class="card card-body h-100">
-        <%- include('note') %>
+    <div class="col-8">
+      <div class="card card-body">
+        <form class="form-group" id="note-id" data-id="<%= selectNote.id %>">
+          <input type="text" class="form-control form-control-lg mb-2" id="note-title" placeholder="Note Title" value="<%= selectNote.title %>">
+          <textarea class="form-control mb-2" id="note-content" rows="8" placeholder="Note Content"><%= selectNote.content %></textarea>
+          <div class="text-center">
+            <button class="btn btn-success save-button">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-

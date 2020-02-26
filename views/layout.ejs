@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/d04de37ee9.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/d04de37ee9.js"
+      crossorigin="anonymous"
+    ></script>
     <link
       rel="stylesheet"
       href="https://bootswatch.com/4/journal/bootstrap.min.css"
@@ -13,10 +16,9 @@
   <body>
     <%- body %>
 
-
     <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
       crossorigin="anonymous"
     ></script>
     <script
@@ -29,5 +31,73 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      $(document).ready(() => {
+
+        // add-note button
+        $(".add-note").on("click", () => {
+          $.ajax({
+            url: "/api/notes",
+            method: "POST"
+          }).then(function(data) {
+            if(data === 'added') {
+              window.location.replace('/notes');
+            }
+          }).catch(function(err) {
+            if(err) throw err;
+          })
+        });
+
+        // note-clicks
+        $(".note").on("click", function(event) {
+          event.stopPropagation();
+          $.ajax({
+            url: `/api/notes/current/${$(this).attr("data-id")}`,
+            method: 'POST'
+          }).then(function(data) {
+            if(data === 'changed') {
+              window.location.replace('/notes');
+            }
+          })
+        });
+
+        // .save-button
+        $(".save-button").on('click', function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+
+          $.ajax({
+            url: '/api/notes',
+            method: "POST", 
+            data: {
+              id: $("#note-id").attr("data-id"),
+              title: $("#note-title").val(),
+              content: $("#note-content").val()
+            }}).then(function(data) {
+              if(data === 'updated') {
+                window.location.replace('/notes');
+              }
+            });
+        });
+
+        // .delete-button
+        $(".delete-button").on("click", function(event) {
+          event.stopPropagation();
+          let noteID = $(this).attr("data-id");
+
+          $.ajax({
+            url: "/api/notes",
+            method: "DELETE",
+            data: { id: noteID }
+          }).then(function(data) {
+            if(data === "deleted") {
+              window.location.replace('/notes');
+            }
+          });
+        });
+
+      }); // end of document-ready
+    </script>
   </body>
 </html>
